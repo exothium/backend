@@ -22,6 +22,8 @@ Create a `.env` file in the root of the project with the following variables:
 | SESSION_SECRET | String |
 | GITHUB_CLIENT_ID | String |
 | GITHUB_CLIENT_SECRET | String |
+| DISCORD_CLIENT_ID | String |
+| DISCORD_CLIENT_SECRET | String |
 | ENVIRONMENT | String - production or development |
 | PORT | Int |
 

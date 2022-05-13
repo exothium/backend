@@ -2,6 +2,7 @@ const dotenv = require("dotenv").config()
 const passport = require("passport")
 const twitterStrategy = require("passport-twitter").Strategy
 const githubStrategy = require("passport-github2").Strategy
+const discordStrategy = require("passport-discord").Strategy
 const express = require("express")
 const session = require('express-session')
 const cors = require("cors")
@@ -42,6 +43,17 @@ passport.use(new githubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: "http://localhost:5000/github/callback"
+}, (token, tokenSecret, profile, callback) => {
+    return callback(null, profile)
+}))
+
+
+    // Discord
+passport.use(new discordStrategy({
+    clientID: process.env.DISCORD_CLIENT_ID,
+    clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    callbackURL: "http://localhost:5000/discord/callback",
+    scope: ["identify", "email", "guilds"]
 }, (token, tokenSecret, profile, callback) => {
     return callback(null, profile)
 }))
@@ -89,8 +101,19 @@ app.get("/github/error", (req, res) => {
 })
 
 
-// Common route
+// Routes for Discord
+app.get("/discord", passport.authenticate("discord"))
+app.get("/discord/callback", passport.authenticate("discord", { failureRedirect: "/discord/error"}), (req, res) => {
+    console.log(req.user)
 
+    res.redirect("http://localhost:3000/")
+})
+
+app.get("/discord/error", (req, res) => {
+    res.status(502).json({ message: "Authentication Error" })
+})
+
+// Common route
 
 app.get("/", (req, res) => {
     if (req.user) {
@@ -106,6 +129,7 @@ app.get("/", (req, res) => {
 
 
 app.get("/logout", (req, res) => {
+    console.log("Logging out")
     req.logOut()
     res.redirect("http://localhost:3000/")
 })
