@@ -78,7 +78,7 @@ app.get("/twitter/callback", passport.authenticate("twitter", { failureRedirect:
         console.log("USER IS NOT VERIFIED")
     }
     // Sucessfull authentication, redirect to the Home Page
-    res.redirect("http://localhost:3000/")
+    res.redirect("http://localhost:3000/login/success")
 })
 
 app.get("/twitter/error", (req, res) => {
@@ -92,7 +92,7 @@ app.get("/github", passport.authenticate("github", { scope: ["read:user"]}))
 app.get("/github/callback", passport.authenticate("github", { failureRedirect: "/github/error"}), (req, res) => {
     console.log(req.user._json)
 
-    res.redirect("http://localhost:3000/")
+    res.redirect("http://localhost:3000/login/success")
 })
 
 
@@ -106,7 +106,8 @@ app.get("/discord", passport.authenticate("discord"))
 app.get("/discord/callback", passport.authenticate("discord", { failureRedirect: "/discord/error"}), (req, res) => {
     console.log(req.user)
 
-    res.redirect("http://localhost:3000/")
+    
+    res.redirect("http://localhost:3000/login/success")
 })
 
 app.get("/discord/error", (req, res) => {
