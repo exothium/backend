@@ -30,11 +30,13 @@ Create a `.env` file in the root of the project with the following variables:
 # Installation
 ```sh
 cd ./project
+npm install
 node index.js
 ```
 
 For development:
 ```sh
 cd ./project
+npm install
 npm run dev
 ```
